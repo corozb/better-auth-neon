@@ -6,6 +6,8 @@
 - show button and test `dev` server
 
 == PART 1 ==
+Setup postgreSQL with Neon and
+Prisma:
 
 - install Better Auth `npm install better-auth`
 - create `.env` and set Environment Variables
@@ -14,10 +16,15 @@
 - install prisma `npm install prisma --save-dev`
 - initialize prisma `npx prisma init`
 - create **Post** Model
+- install `npm install --save-dev prisma dotenv`
+- generate prisma client `npx prisma generate`
 - push database changes `npx prisma db push`
 - add `generated` to `.gitignore`
-- adjust **scripts** in `package.json`
-
+- adjust **scripts** in `package.json`: "dev":
+  ```
+  "dev": "prisma generate && next dev --turbopack",
+  "build": "prisma generate && next build",
+  ```
 - create single Prisma Client in `lib/prisma.ts`
 - setup prisma adapter with better-auth
 - generate auth tables `npx @better-auth/cli generate --output=auth.schema.prisma`
@@ -28,10 +35,10 @@
   - `Account`
   - `Verification`
 - push database changes `npx prisma db push`
+
 - create Mount Handler in `app/api/auth/[...all]/route.ts`
 - adjust `eslint.config.mjs` to ignore `/src/generated/**/*`
 - create Client instance in `lib/auth-client.ts`
-
 - Enable Email & Password Authentication
 - Create Sign Up Page PT1
   - Create Form `components/register-form.tsx`
