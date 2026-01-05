@@ -8,25 +8,30 @@ export default async function Page() {
     headers: await headers(),
   });
 
-  if (!session) return <p className="text-destructive">Unauthorized</p>;
   return (
     <div className="px-8 py-16 container mx-auto max-w-screen-lg space-y-4">
       <div className="space-y-4">
-        <ReturnButton href="/" label="Home" />
+        <ReturnButton href="/auth/login" label="Login" />
 
-        <h1 className="text-3xl font-bold">Profile</h1>
+        {!session ? (
+          <p className="text-destructive">Unauthorized</p>
+        ) : (
+          <>
+            <h1 className="text-3xl font-bold">Profile</h1>
 
-        <div className="flex items-center gap-2">
-          {/* {session.user.role === "ADMIN" && (
+            <div className="flex items-center gap-2">
+              {/* {session.user.role === "ADMIN" && (
             <Button size="sm" asChild>
-              <Link href="/admin/dashboard">Admin Dashboard</Link>
+            <Link href="/admin/dashboard">Admin Dashboard</Link>
             </Button>
-          )}*/}
+            )}*/}
 
-          <SignOutButton />
-        </div>
+              <SignOutButton />
+              <pre className="text-sn overflow-clip">{JSON.stringify(session, null, 2)}</pre>
+            </div>
+          </>
+        )}
       </div>
-      <pre className="text-sn overflow-clip">{JSON.stringify(session, null, 2)}</pre>
     </div>
   );
 }

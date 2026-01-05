@@ -69,14 +69,14 @@ Prisma:
 == PART 2 ==
 
 - Showcase `onRequest` and `onResponse`
-- Showcase Full Cycle Again
 - Add Convenience Links for Auth Pages
+- Showcase Full Cycle Again
 - OPTIONS - **autoSignIn**
   - Showcase
 - OPTIONS - **advanced.database.generateId**
-  - Table IDs (change `schema.prisma` and push)
+  - Table IDs (change `schema.prisma` and push `npx prisma db push`)
   - Showcase
-  - Truncate Tables
+  - Truncate Tables -- Clear all data
 - OPTIONS - **emailAndPassword.password**
   - Create User
   - Argon2 `npm install @node-rs/argon2`
