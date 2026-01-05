@@ -4,7 +4,7 @@ export default function Page() {
   return (
     <div>
       <Button variant="default" size="lg">
-        Click Me
+        Hola Click Me
       </Button>
     </div>
   );
