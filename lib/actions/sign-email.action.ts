@@ -1,7 +1,8 @@
 "use server";
+import { auth, ErrorCode } from "@/lib/auth";
 
-import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { APIError } from "better-auth/api";
 
 export async function signUpEmailAction(formData: FormData) {
   const name = String(formData.get("name"));
@@ -23,8 +24,16 @@ export async function signUpEmailAction(formData: FormData) {
     });
     return { error: null };
   } catch (err) {
-    if (err instanceof Error) {
-      return { error: "Oops! Something went wrong while registering" };
+    if (err instanceof APIError) {
+      const errCode = err.body ? (err.body.code as ErrorCode) : "UNKNOWN";
+
+      const errorMessages: Record<string, string> = {
+        USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: "Oops! something went wrong. Please try again.",
+      };
+
+      return {
+        error: errorMessages[errCode] ?? err.message,
+      };
     }
 
     return { error: "Internal Server Error" };
@@ -70,8 +79,8 @@ export async function signInEmailAction(formData: FormData) {
     // }
     return { error: null };
   } catch (err) {
-    if (err instanceof Error) {
-      return { error: "Oops! Something went wrong while logging in" };
+    if (err instanceof APIError) {
+      return { error: err.message };
     }
 
     return { error: "Internal Server Error" };
