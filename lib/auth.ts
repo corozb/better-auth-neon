@@ -1,10 +1,12 @@
 import { APIError, betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, UserRole } from "@prisma/client";
 import { hasPassword, verifyPassword } from "@/lib/argon2";
 import { nextCookies } from "better-auth/next-js";
 import { createAuthMiddleware } from "better-auth/api";
 import { getValidDomains, normalizeName } from "@/lib/utils";
+import { admin } from "better-auth/plugins";
+import { ac, roles } from "@/lib/permissions";
 
 const prisma = new PrismaClient();
 
@@ -48,6 +50,29 @@ export const auth = betterAuth({
       }
     }),
   },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(";") ?? [];
+
+          if (ADMIN_EMAILS.includes(user.email)) {
+            return { data: { ...user, role: UserRole.ADMIN } };
+          }
+
+          return { data: user };
+        },
+      },
+    },
+  },
+  user: {
+    additionalFields: {
+      role: {
+        type: ["USER", "ADMIN"] as Array<UserRole>,
+        input: false,
+      },
+    },
+  },
   session: {
     expiresIn: 30 * 24 * 60 * 60, // 30 days
   },
@@ -56,7 +81,15 @@ export const auth = betterAuth({
       generateId: false,
     },
   },
-  plugins: [nextCookies()], // This allows to remove lines in 52 to 70 in sign-email.action.ts
+  plugins: [
+    nextCookies(), // This allows to remove lines in 52 to 70 in sign-email.action.ts
+    admin({
+      defaultRole: UserRole.USER,
+      adminRoles: [UserRole.ADMIN],
+      ac,
+      roles,
+    }),
+  ],
 });
 
 export type ErrorCode = keyof typeof auth.$ERROR_CODES | "UNKNOWN";
