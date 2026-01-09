@@ -3,6 +3,7 @@ import { auth, ErrorCode } from "@/lib/auth";
 
 import { headers } from "next/headers";
 import { APIError } from "better-auth/api";
+import { redirect } from "next/navigation";
 
 export async function signUpEmailAction(formData: FormData) {
   const name = String(formData.get("name"));
@@ -80,7 +81,13 @@ export async function signInEmailAction(formData: FormData) {
     return { error: null };
   } catch (err) {
     if (err instanceof APIError) {
-      return { error: err.message };
+      const errCode = err.body ? (err.body.code as ErrorCode) : "UNKNOWN";
+
+      const errorMessage: Record<string, string> = {
+        EMAIL_NOT_VERIFIED: redirect("/auth/verify?error=email_not_verified"),
+      };
+
+      return errorMessage[errCode] || { error: err.message };
     }
 
     return { error: "Internal Server Error" };

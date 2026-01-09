@@ -177,7 +177,11 @@ Prisma:
 
 == PART 6 ==
 
-- Nodemailer
+- [Nodemailer](https://nodemailer.com/usage)
+  - install:
+    `npm install nodemailer`
+    `npm install @types/nodemailer -D`
+  - App Password in Google
   - Create Template
 - Verify Email
   - `emailAndPassword.requireEmailVerification`
@@ -186,7 +190,9 @@ Prisma:
   - Destructure sendVerificationEmail
   - Handle Login Page Not Verified
 - Create Post Sign Up Page
+
   - Showcase
+
 - Forgot Password
   - Page / Form / Success
 - Reset Password

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { signInEmailAction } from "@/lib/actions/sign-email.action";
+import Link from "next/link";
 
 export const LoginForm = () => {
   const [isPending, setIsPending] = useState(false);
@@ -35,7 +36,17 @@ export const LoginForm = () => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <div className="flex justify-between items-center gap-2">
+          <Label htmlFor="password">Password</Label>
+          <Link
+            tabIndex={-1}
+            href="/auth/forgot-password"
+            className="text-sm italic text-muted-foreground hover:text-foreground"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
         <Input type="password" id="password" name="password" />
       </div>
 

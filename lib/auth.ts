@@ -7,6 +7,7 @@ import { createAuthMiddleware } from "better-auth/api";
 import { getValidDomains, normalizeName } from "@/lib/utils";
 import { admin } from "better-auth/plugins";
 import { ac, roles } from "@/lib/permissions";
+import { sendEmailAction } from "@/lib/actions/send-email.action";
 
 const prisma = new PrismaClient();
 
@@ -21,6 +22,34 @@ export const auth = betterAuth({
     password: {
       hash: hasPassword,
       verify: verifyPassword,
+    },
+    requireEmailVerification: true,
+    sendResetPassword: async ({ user, url }) => {
+      await sendEmailAction({
+        to: user.email,
+        subject: "Reset your password",
+        meta: {
+          description: "Please click the link below to reset your password",
+          link: url,
+        },
+      });
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      const link = new URL(url);
+      link.searchParams.set("callbackURL", "/auth/verify");
+
+      await sendEmailAction({
+        to: user.email,
+        subject: "Verify your email Address",
+        meta: {
+          description: "Please verify your email address to complete registration",
+          link: String(link),
+        },
+      });
     },
   },
   socialProviders: {
