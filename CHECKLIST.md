@@ -161,8 +161,15 @@ Prisma:
 == PART 5 ==
 
 - Google OAuth
+
   - Create Buttons
+  - Create project in Google Cloud console
+  - OAuth credencials
+  - [Google Auth](https://www.better-auth.com/docs/authentication/google)
+
 - GitHub OAuth
+  - Setting Github
+  - [Github OAuth](https://www.better-auth.com/docs/authentication/github)
 - Account Linking
 - Error Handling
   - `/auth/login/error`

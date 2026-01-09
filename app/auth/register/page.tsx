@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { RegisterForm } from "@/components/register-form";
 import { ReturnButton } from "@/components/return-button";
+import { SignInOauthButton } from "@/components/sign-in-oauth-buttons";
 
 export default function Page() {
   return (
@@ -22,12 +23,11 @@ export default function Page() {
         </p>
       </div>
 
-      <hr className="max-w-sm" />
-
-      {/* <div className="flex flex-col max-w-sm gap-4">
+      <div className="flex flex-col max-w-sm gap-4">
+        <hr className="max-w-sm" />
         <SignInOauthButton provider="google" signUp />
         <SignInOauthButton provider="github" signUp />
-      </div> */}
+      </div>
     </div>
   );
 }
