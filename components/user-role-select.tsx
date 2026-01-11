@@ -22,11 +22,12 @@ export const UserRoleSelect = ({ userId, role }: UserRoleSelectProps) => {
         user: ["set-role"],
       },
     });
-    if (canChangeRole.error) {
+    if (!canChangeRole.error) {
       return toast.error("Forbidden");
     }
     await admin.setRole({
       userId,
+      // @ts-ignore
       role: newRole,
       fetchOptions: {
         onRequest: () => {
